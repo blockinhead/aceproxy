@@ -26,9 +26,17 @@ class Torrenttelik(AceProxyPlugin):
         try:
             req = urllib2.Request(url, headers={'User-Agent' : "Magic Browser"})
             Torrenttelik.playlist = urllib2.urlopen(req, timeout=10).read()
+            Torrenttelik.logger.info('downloading playlist from %s' % url)
             Torrenttelik.playlist = Torrenttelik.playlist.split('\xef\xbb\xbf')[1]    # garbage at the beginning
-        except:
+            odd_comma_index = Torrenttelik.playlist.rfind(',', -10)  # there is odd comma in json before closing curly bracket
+            if odd_comma_index != -1:
+                Torrenttelik.playlist = Torrenttelik.playlist[:odd_comma_index] + Torrenttelik.playlist[odd_comma_index + 1:]
+            #some debug code
+            #with open('c:/tmp/playlist.txt', 'w') as pl:
+            #    pl.write(Torrenttelik.playlist)
+        except Exception, e:
             Torrenttelik.logger.error("Can't download playlist!")
+            Torrenttelik.logger.error('exception %s' % repr(e))
             return False
 
         return True
