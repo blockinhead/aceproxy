@@ -36,7 +36,7 @@ class PlaylistGenerator(object):
         Generates EXTINF line with url
         '''
         return PlaylistGenerator.m3uchanneltemplate % (
-            item.get('group', ''), item.get('tvg', ''), item.get('tvgid', ''),
+            item.get('group', item.get('cat','')), item.get('tvg', ''), item.get('tvgid', ''), #for in superpomoyka's and torrent-telik's playlists goup is called cat
             item.get('logo', ''), item.get('name'), item.get('url'))
 
     def exportm3u(self, hostport, add_ts=False, empty_header=False, archive=False, header=None):
